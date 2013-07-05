@@ -12,8 +12,6 @@ public class MarsRover {
 	Direction direction;
 	CommandController cmdController;
 	
-	private boolean printable = false;
-	
 	public MarsRover() {
 		this.cmdController = new CommandController(this);
 	}
