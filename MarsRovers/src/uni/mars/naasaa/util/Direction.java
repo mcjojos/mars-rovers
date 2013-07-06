@@ -7,10 +7,11 @@ import java.util.logging.Logger;
  * field representing a point the forward steps in the X and Y dimensions are
  * modeled with the two first constructor arguments, the third one representing
  * the index of each cardinal compass point, thus avoiding using the ordinal()
- * method as recommended. findDirection(java.lang.String) is intended to be used
- * an an alternative to Direction.valueOf(java.lang.String) as a more flexible
- * alternative that defaults to 'N' in case the specified enum type has no
- * constant with the specified name instead of throwing {@link IllegalArgumentException}.
+ * method as recommended. The method findDirection(java.lang.String) is intended
+ * to be used an an alternative to Direction.valueOf(java.lang.String) as a more
+ * flexible alternative that defaults to 'N' in case the specified enum type has
+ * no constant with the specified name instead of throwing
+ * {@link IllegalArgumentException}.
  * 
  * @author karanikasg
  * 
@@ -89,9 +90,9 @@ public enum Direction {
 
 	/**
 	 * This method is intended to be used an an alternative to
-	 * Direction.valueOf(java.lang.String). In case the specified enum type has no
-	 * constant with the specified name the default type for North is returned
-	 * instead of throwing {@link IllegalArgumentException}.
+	 * Direction.valueOf(java.lang.String). In case the specified enum type has
+	 * no constant with the specified name the default type for North is
+	 * returned instead of throwing {@link IllegalArgumentException}.
 	 * 
 	 * @param direction
 	 * @return
