@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import uni.mars.naasaa.MarsRover;
@@ -43,8 +42,8 @@ public class TestMarsRover extends TestCase {
 			
 			MarsRover rover = new MarsRover();
 			rover.setTable(planeTable);
-			rover.positionOnTable(Integer.parseInt(positionSplitted[0]), Integer.parseInt(positionSplitted[1]), positionSplitted[2]);
-			rover.setInputCommands(instructionsInput.toCharArray());
+			rover.landOnTable(Integer.parseInt(positionSplitted[0]), Integer.parseInt(positionSplitted[1]), positionSplitted[2]);
+			rover.receiveCommands(instructionsInput.toCharArray());
 			marsRovers.add(rover);
 		}
 		
@@ -62,11 +61,11 @@ public class TestMarsRover extends TestCase {
 		List<MarsRover> rovers = initFromFile("input1.txt");
 		assertEquals(1, rovers.size());
 		MarsRover rover = rovers.get(0);
-		rover.execute();
-		rover.print();
+		rover.executeCommands();
+		rover.logPosition();
 		// result: 1 3 N
-		assertEquals(1, rover.getPoint().getX());
-        assertEquals(3, rover.getPoint().getY());
+		assertEquals(1, rover.getPosition().getX());
+        assertEquals(3, rover.getPosition().getY());
         assertEquals(Direction.N, rover.getDirection());
 	}
 
@@ -81,11 +80,11 @@ public class TestMarsRover extends TestCase {
 		List<MarsRover> rovers = initFromFile("input2.txt");
 		assertEquals(1, rovers.size());
 		MarsRover rover = rovers.get(0);
-		rover.execute();
-		rover.print();
+		rover.executeCommands();
+		rover.logPosition();
 		// result: 5 1 E
-        assertEquals(5, rover.getPoint().getX());
-        assertEquals(1, rover.getPoint().getY());
+        assertEquals(5, rover.getPosition().getX());
+        assertEquals(1, rover.getPosition().getY());
         assertEquals(Direction.E, rover.getDirection());
 	}
 
