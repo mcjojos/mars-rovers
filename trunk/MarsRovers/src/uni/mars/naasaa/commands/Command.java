@@ -3,7 +3,7 @@ package uni.mars.naasaa.commands;
 import uni.mars.naasaa.MarsRover;
 
 /**
- * The super class of all Commands. It should encapsulate invocation of an
+ * The super type of all Commands. It should encapsulate invocation of an
  * action, adhering to the Command pattern.
  * 
  * @author karanikasg
