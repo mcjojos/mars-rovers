@@ -7,7 +7,7 @@ import uni.mars.naasaa.commands.RightCommand;
 
 /**
  * Enumeration defining the three possible instructions - Left, Right and
- * MoveForward It also maps each one of them in the analogous Commands.
+ * MoveForward. It also maps each one of them in the analogous {@link Command}s.
  * 
  * @author karanikasg
  * 
