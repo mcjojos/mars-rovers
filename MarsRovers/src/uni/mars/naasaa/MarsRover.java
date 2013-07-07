@@ -14,16 +14,13 @@ import uni.mars.naasaa.util.PlaneTable;
  * Ideally the commands must have been also already transmitted. If the rover is
  * not yet landed then the default coordinates of Plane.X/2, Plane.Y/2 are used.
  * The recommended sequence of method invocations must adhere to the following
- * commands:
- * MarsRover rover = new MarsRover();
- * rover.setTable(plateau);
- * rover.landOnTable(x, y, direction);
- * rover.receiveCommands(instructions);
+ * commands: MarsRover rover = new MarsRover(); rover.setTable(plateau);
+ * rover.landOnTable(x, y, direction); rover.receiveCommands(instructions);
  * rover.executeCommands();
  * 
- * In case the direction type is not found the default that is used is N (North).
- * In case an instruction is not matched against the determined ones then it
- * is simply skipped.
+ * In case the direction type is not found the default that is used is N
+ * (North). In case an instruction is not matched against the determined ones
+ * then it is simply skipped.
  * 
  * @author karanikasg
  * 
@@ -98,6 +95,9 @@ public class MarsRover {
 		x = getBetweenBoundary(x, 0, planeTable.getXAxis());
 		y = getBetweenBoundary(y, 0, planeTable.getYAxis());
 		this.position = new Point(x, y);
+		// Using of valueOf(java.lang.String) will throw an
+		// IllegalArgumentException in case the direction type is not known. Use
+		// findDirection(java.lang.String) instead in order to default to N
 		this.direction = Direction.findDirection(d);
 	}
 
