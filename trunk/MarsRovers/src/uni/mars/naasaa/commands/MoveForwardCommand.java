@@ -3,7 +3,7 @@ package uni.mars.naasaa.commands;
 import uni.mars.naasaa.MarsRover;
 
 /**
- * A concrete command that implements moving forward one step/
+ * A concrete command that implements moving forward one step.
  * 
  * @author karanikasg
  *
