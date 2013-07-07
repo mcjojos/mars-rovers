@@ -1,5 +1,11 @@
 package uni.mars.naasaa;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import uni.mars.naasaa.commands.CommandController;
@@ -27,6 +33,9 @@ import uni.mars.naasaa.util.PlaneTable;
  * }
  * </pre>
  * 
+ * It is assumed that no collision can occur between two rovers and that we can
+ * position them in the same point
+ * 
  * In case the direction type is not found the default that is used is N
  * (North). In case an instruction is not matched against the determined ones
  * then it is simply skipped.
@@ -36,7 +45,7 @@ import uni.mars.naasaa.util.PlaneTable;
  */
 public class MarsRover {
 
-	private final static Direction DEFAULT_DIRECTION = Direction.N;
+	private final static String DEFAULT_DIRECTION = Direction.N.toString();
 
 	private PlaneTable planeTable;
 	private Point position;
@@ -81,32 +90,18 @@ public class MarsRover {
 	 * @param d
 	 *            the cardinal point
 	 */
-	public void landOnTable(int x, int y, Direction d) {
-		landOnTable(x, y, d.toString());
-	}
-
-	/**
-	 * Land the rover in Mars. If no plateau is defined mark the default plane
-	 * and land it over there. Make sure the final position of the rover is
-	 * between the plateau's boundaries.
-	 * 
-	 * @param x
-	 *            the rover's position in the X Axis
-	 * @param y
-	 *            the rover's position in the Y Axis
-	 * @param d
-	 *            the cardinal point
-	 */
 	public void landOnTable(int x, int y, String d) {
 		if (planeTable == null) {
 			planeTable = new PlaneTable();
 		}
+
 		x = getBetweenBoundary(x, 0, planeTable.getXAxis());
 		y = getBetweenBoundary(y, 0, planeTable.getYAxis());
 		this.position = new Point(x, y);
+
 		// Using of valueOf(java.lang.String) will throw an
 		// IllegalArgumentException in case the direction type is not known. Use
-		// findDirection(java.lang.String) instead in order to default to N
+		// findDirection(java.lang.String) instead in order to default to N.
 		this.direction = Direction.findDirection(d);
 	}
 
@@ -116,8 +111,22 @@ public class MarsRover {
 	 * 
 	 * @param input
 	 */
-	public void receiveCommands(char[] input) {
-		this.cmdController.parse(input);
+	public void receiveCommands(String input) {
+		this.cmdController.parse(input.toCharArray());
+	}
+
+	/**
+	 * Receive the commands sent by NAASAA by parsing and storing them
+	 * sequentially. Then execute all the commands (if any) sent by NAASAA in
+	 * the order they were received. First check if the rover is already landed
+	 * on Mars between the boundaries specified by the plateau and if not land
+	 * it in the middle of it.
+	 * 
+	 * @param input
+	 */
+	public void receiveAndExecuteCommands(String input) {
+		this.receiveCommands(input);
+		this.executeCommands();
 	}
 
 	/**
@@ -147,6 +156,16 @@ public class MarsRover {
 	 */
 	public Direction getDirection() {
 		return this.direction;
+	}
+
+	/**
+	 * Set the rover's direction. Default to N.
+	 * 
+	 * @param d
+	 *            the direction
+	 */
+	public void setDirection(String direction) {
+		this.direction = Direction.findDirection(direction);
 	}
 
 	/*******************************************************
@@ -204,6 +223,64 @@ public class MarsRover {
 			result = false;
 		}
 		return result;
+	}
+
+	/**
+	 * Static method that loads all the data from a single file and returns the
+	 * array of landed rovers.
+	 * 
+	 * @param file
+	 *            the file to be read for input.
+	 * @param execute
+	 *            true if the commands should be executed instantly, false
+	 *            otherwise.
+	 * @param loggable
+	 *            true to log the final position of each rover.
+	 * @return an array of MarsRovers positioned in the Plateau in Mars.
+	 * @throws NumberFormatException
+	 *             if any of the strings does not contain a parsable integer.
+	 * @throws IOException
+	 *             if the file cannot be opened for some reason, or if a general
+	 *             I/O error occurs.
+	 */
+	public static MarsRover[] loadFromFile(File file, boolean execute,
+			boolean loggable) throws NumberFormatException, IOException {
+
+		List<MarsRover> marsRovers = new ArrayList<MarsRover>();
+		final BufferedReader in = new BufferedReader(new FileReader(file));
+		final String tableInput = in.readLine();
+		final String[] dimensions = tableInput == null ? new String[] { "0",
+				"0" } : tableInput.split(" ");
+
+		int upperRightX = Integer.parseInt(dimensions[0]);
+		int upperRightY = Integer.parseInt(dimensions[1]);
+
+		String position;
+		String instructionsInput;
+
+		while ((position = in.readLine()) != null
+				&& (instructionsInput = in.readLine()) != null) {
+			String[] positionSplitted = position.split(" ");
+
+			MarsRover rover = new MarsRover();
+			rover.setTable(upperRightX, upperRightY);
+			rover.landOnTable(Integer.parseInt(positionSplitted[0]),
+					Integer.parseInt(positionSplitted[1]), positionSplitted[2]);
+			rover.receiveCommands(instructionsInput);
+
+			if (execute) {
+				rover.executeCommands();
+			}
+			if (loggable) {
+				rover.logPosition();
+			}
+			marsRovers.add(rover);
+		}
+
+		// All rovers are landed in the plateau and have received their
+		// commands; optionally they could be executed as well.
+		return marsRovers.toArray(new MarsRover[marsRovers.size()]);
+
 	}
 
 }
