@@ -14,9 +14,18 @@ import uni.mars.naasaa.util.PlaneTable;
  * Ideally the commands must have been also already transmitted. If the rover is
  * not yet landed then the default coordinates of Plane.X/2, Plane.Y/2 are used.
  * The recommended sequence of method invocations must adhere to the following
- * commands: MarsRover rover = new MarsRover(); rover.setTable(plateau);
- * rover.landOnTable(x, y, direction); rover.receiveCommands(instructions);
- * rover.executeCommands();
+ * commands:
+ * 
+ * <pre>
+ * {
+ * 	&#064;code
+ * 	MarsRover rover = new MarsRover();
+ * 	rover.setTable(plateau);
+ * 	rover.landOnTable(x, y, direction);
+ * 	rover.receiveCommands(instructions);
+ * 	rover.executeCommands();
+ * }
+ * </pre>
  * 
  * In case the direction type is not found the default that is used is N
  * (North). In case an instruction is not matched against the determined ones
