@@ -30,7 +30,8 @@ public class CommandController {
 	 * and the marsRover to be used.
 	 * 
 	 * @param marsRover
-	 *            the MarsRover that should be used by each command.
+	 *            the {@link MarsRover} object that should be used by each
+	 *            command.
 	 */
 	public CommandController(MarsRover marsRover) {
 		this.commands = new LinkedList<Command>();
