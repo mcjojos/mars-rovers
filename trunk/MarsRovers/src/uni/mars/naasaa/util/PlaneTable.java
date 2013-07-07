@@ -2,7 +2,7 @@ package uni.mars.naasaa.util;
 
 /**
  * Represents the rectangular table of the plateau. The lower-left coordinates
- * are assumed to be 0,0.
+ * are assumed to be at 0,0.
  * 
  * @author karanikasg
  * 
@@ -50,7 +50,7 @@ public class PlaneTable {
 	}
 
 	/**
-	 * Static method to get the default X coordinate for landing which in this
+	 * Static method to get the default X coordinate for landing, which in this
 	 * case is half way the whole distance.
 	 * 
 	 * @param planeTable
@@ -64,7 +64,7 @@ public class PlaneTable {
 	}
 
 	/**
-	 * Static method to get the default Y coordinate for landing which in this
+	 * Static method to get the default Y coordinate for landing, which in this
 	 * case is half way the whole distance.
 	 * 
 	 * @param planeTable
