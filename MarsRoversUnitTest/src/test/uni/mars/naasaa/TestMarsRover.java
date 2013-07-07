@@ -3,17 +3,13 @@
  */
 package test.uni.mars.naasaa;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
 import uni.mars.naasaa.MarsRover;
 import uni.mars.naasaa.util.Direction;
-import uni.mars.naasaa.util.PlaneTable;
 
 import junit.framework.TestCase;
 
@@ -23,120 +19,162 @@ import junit.framework.TestCase;
  */
 public class TestMarsRover extends TestCase {
 
-	private PlaneTable planeTable;
-	
-	private List<MarsRover> initFromFile(String fileName) throws NumberFormatException, IOException {
-		
-		List<MarsRover> marsRovers = new ArrayList<MarsRover>();
-		final BufferedReader in = new BufferedReader(new FileReader(fileName));
-		final String tableInput = in.readLine();
-		final String[] dimensions = tableInput == null ? new String[] { "0", "0" } : tableInput.split(" ");
-		
-		planeTable = new PlaneTable(Integer.parseInt(dimensions[0]), Integer.parseInt(dimensions[1]));
-		
-		String position;
-		String instructionsInput;
-		
-		while ((position = in.readLine()) != null && (instructionsInput = in.readLine()) != null) {
-			String[] positionSplitted = position.split(" ");
-			
-			MarsRover rover = new MarsRover();
-			rover.setTable(planeTable);
-			rover.landOnTable(Integer.parseInt(positionSplitted[0]), Integer.parseInt(positionSplitted[1]), positionSplitted[2]);
-			rover.receiveCommands(instructionsInput.toCharArray());
-			marsRovers.add(rover);
+	private final static String TURN_LEFT = "L";
+	private final static String TURN_RIGHT = "R";
+	private final static String MOVE_FORWARD = "M";
+	private final static String NORTH = "N";
+	// private final static String EAST = "E";
+	// private final static String SOUTH = "S";
+	private final static String WEST = "W";
+
+	private final static boolean IS_LOGGABLE = true;
+
+	/**
+	 * Test parsing from file input1.txt
+	 */
+	@Test
+	public void testLoadFromFile1() {
+		try {
+			MarsRover[] rovers;
+			rovers = MarsRover.loadFromFile(new File("input1.txt"), true,
+					IS_LOGGABLE);
+			assertEquals(1, rovers.length);
+			// result: 1 3 N
+			assertEquals(1, rovers[0].getPosition().getX());
+			assertEquals(3, rovers[0].getPosition().getY());
+			assertEquals(Direction.N, rovers[0].getDirection());
+		} catch (NumberFormatException | IOException e) {
+			fail(e.getMessage());
 		}
-		
-		return marsRovers;
-		
 	}
 
 	/**
-	 * Test method for {@link uni.mars.naasaa.MarsRover#execute()}.
-	 * @throws IOException 
-	 * @throws NumberFormatException 
+	 * Test parsing from file input2.txt
 	 */
 	@Test
-	public void testMarsRoverExecute1() throws NumberFormatException, IOException {
-		List<MarsRover> rovers = initFromFile("input1.txt");
-		assertEquals(1, rovers.size());
-		MarsRover rover = rovers.get(0);
-		rover.executeCommands();
-		rover.logPosition();
-		// result: 1 3 N
-		assertEquals(1, rover.getPosition().getX());
-        assertEquals(3, rover.getPosition().getY());
-        assertEquals(Direction.N, rover.getDirection());
+	public void testLoadFromFile2() {
+		try {
+			MarsRover[] rovers;
+			rovers = MarsRover.loadFromFile(new File("input2.txt"), true,
+					IS_LOGGABLE);
+			assertEquals(1, rovers.length);
+			// result: 5 1 E
+			assertEquals(5, rovers[0].getPosition().getX());
+			assertEquals(1, rovers[0].getPosition().getY());
+			assertEquals(Direction.E, rovers[0].getDirection());
+		} catch (NumberFormatException | IOException e) {
+			fail(e.getMessage());
+		}
 	}
 
-	
 	/**
-	 * Test method for {@link uni.mars.naasaa.MarsRover#execute()}.
-	 * @throws IOException 
-	 * @throws NumberFormatException 
+	 * Test parsing the commands for two rovers with bigger instruction inputs
+	 * 
 	 */
 	@Test
-	public void testMarsRoverExecute2() throws NumberFormatException, IOException {
-		List<MarsRover> rovers = initFromFile("input2.txt");
-		assertEquals(1, rovers.size());
-		MarsRover rover = rovers.get(0);
-		rover.executeCommands();
-		rover.logPosition();
-		// result: 5 1 E
-        assertEquals(5, rover.getPosition().getX());
-        assertEquals(1, rover.getPosition().getY());
-        assertEquals(Direction.E, rover.getDirection());
+	public void testLoadMultipleRoversFromFile3() {
+		try {
+			MarsRover[] rovers;
+			rovers = MarsRover.loadFromFile(new File("input3.txt"), true,
+					IS_LOGGABLE);
+			assertEquals(2, rovers.length);
+			// result: 4 5 S
+			assertEquals(4, rovers[0].getPosition().getX());
+			assertEquals(5, rovers[0].getPosition().getY());
+			assertEquals(Direction.S, rovers[0].getDirection());
+			// result: 1 4 E
+			assertEquals(1, rovers[1].getPosition().getX());
+			assertEquals(4, rovers[1].getPosition().getY());
+			assertEquals(Direction.E, rovers[1].getDirection());
+		} catch (NumberFormatException | IOException e) {
+			fail(e.getMessage());
+		}
 	}
 
 	/**
-//	 * Test method for {@link uni.mars.naasaa.MarsRover#setTable(int, int)}.
-//	 */
-//	@Test
-//	public void testSetTable() {
-//		fail("Not yet implemented");
-//	}
-//
-//	/**
-//	 * Test method for
-//	 * {@link uni.mars.naasaa.MarsRover#positionOnTable(int, int, java.lang.String)}
-//	 * .
-//	 */
-//	@Test
-//	public void testPositionOnTable() {
-//		fail("Not yet implemented");
-//	}
-//
-//	/**
-//	 * Test method for {@link uni.mars.naasaa.MarsRover#actionLeft()}.
-//	 */
-//	@Test
-//	public void testActionLeft() {
-//		fail("Not yet implemented");
-//	}
-//
-//	/**
-//	 * Test method for {@link uni.mars.naasaa.MarsRover#actionRight()}.
-//	 */
-//	@Test
-//	public void testActionRight() {
-//		fail("Not yet implemented");
-//	}
-//
-//	/**
-//	 * Test method for {@link uni.mars.naasaa.MarsRover#actionMoveForward()}.
-//	 */
-//	@Test
-//	public void testActionMoveForward() {
-//		fail("Not yet implemented");
-//	}
-//
-//	/**
-//	 * Test method for
-//	 * {@link uni.mars.naasaa.MarsRover#main(java.lang.String[])}.
-//	 */
-//	@Test
-//	public void testMain() {
-//		fail("Not yet implemented");
-//	}
+	 * Test if the default position of the rover is in the middle of the plateau
+	 * heading North.
+	 */
+	@Test
+	public void testDefaultPosition() {
+		MarsRover rover = new MarsRover();
+		rover.setTable(6, 6);
+		rover.receiveCommands("LLL");
+		rover.executeCommands();
+		log(rover);
+		assertEquals(3, rover.getPosition().getX());
+		assertEquals(3, rover.getPosition().getY());
+		assertEquals(Direction.E, rover.getDirection());
+	}
+
+	/**
+	 * Test turning from all possible directions.
+	 */
+	@Test
+	public void testTurning() {
+		MarsRover rover = new MarsRover();
+		rover.setDirection(NORTH);
+		rover.receiveAndExecuteCommands(TURN_LEFT);
+		assertEquals(Direction.W, rover.getDirection());
+		rover.receiveAndExecuteCommands(TURN_LEFT);
+		assertEquals(Direction.S, rover.getDirection());
+		rover.receiveAndExecuteCommands(TURN_LEFT);
+		assertEquals(Direction.E, rover.getDirection());
+		rover.receiveAndExecuteCommands(TURN_LEFT);
+		assertEquals(Direction.N, rover.getDirection());
+
+		rover.receiveAndExecuteCommands(TURN_RIGHT);
+		assertEquals(Direction.E, rover.getDirection());
+		rover.receiveAndExecuteCommands(TURN_RIGHT);
+		assertEquals(Direction.S, rover.getDirection());
+		rover.receiveAndExecuteCommands(TURN_RIGHT);
+		assertEquals(Direction.W, rover.getDirection());
+		rover.receiveAndExecuteCommands(TURN_RIGHT);
+		assertEquals(Direction.N, rover.getDirection());
+	}
+
+	/**
+	 * Land the rover outside the plane. Then direct it to the boundaries of the
+	 * plane
+	 */
+	@Test
+	public void testPlateauBoundaries() {
+		MarsRover rover = new MarsRover();
+		rover.setTable(5, 5);
+		rover.landOnTable(15, 15, WEST);
+		assertEquals(5, rover.getPosition().getX());
+		assertEquals(5, rover.getPosition().getY());
+		for (int i = 0; i < 100; i++) {
+			rover.receiveCommands(MOVE_FORWARD);
+		}
+		rover.receiveAndExecuteCommands(TURN_LEFT);
+		assertEquals(0, rover.getPosition().getX());
+
+		for (int i = 0; i < 100; i++) {
+			rover.receiveCommands(MOVE_FORWARD);
+		}
+		rover.receiveAndExecuteCommands(TURN_LEFT);
+		assertEquals(0, rover.getPosition().getY());
+
+		for (int i = 0; i < 5; i++) {
+			rover.receiveCommands(MOVE_FORWARD);
+		}
+		rover.receiveCommands(TURN_LEFT);
+		for (int i = 0; i < 5; i++) {
+			rover.receiveCommands(MOVE_FORWARD);
+		}
+		rover.executeCommands();
+		assertEquals(5, rover.getPosition().getX());
+		assertEquals(5, rover.getPosition().getY());
+		assertEquals(Direction.N, rover.getDirection());
+
+		log(rover);
+	}
+
+	private void log(MarsRover rover) {
+		if (IS_LOGGABLE) {
+			rover.logPosition();
+		}
+	}
 
 }
