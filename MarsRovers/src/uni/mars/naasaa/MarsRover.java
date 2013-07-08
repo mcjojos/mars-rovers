@@ -245,41 +245,45 @@ public class MarsRover {
 	 */
 	public static MarsRover[] loadFromFile(File file, boolean execute,
 			boolean loggable) throws NumberFormatException, IOException {
-
-		List<MarsRover> marsRovers = new ArrayList<MarsRover>();
 		final BufferedReader in = new BufferedReader(new FileReader(file));
-		final String tableInput = in.readLine();
-		final String[] dimensions = tableInput == null ? new String[] { "0",
-				"0" } : tableInput.split(" ");
+		try {
+			List<MarsRover> marsRovers = new ArrayList<MarsRover>();
+			final String tableInput = in.readLine();
+			final String[] dimensions = tableInput == null ? new String[] {
+					"0", "0" } : tableInput.split(" ");
 
-		int upperRightX = Integer.parseInt(dimensions[0]);
-		int upperRightY = Integer.parseInt(dimensions[1]);
+			int upperRightX = Integer.parseInt(dimensions[0]);
+			int upperRightY = Integer.parseInt(dimensions[1]);
 
-		String position;
-		String instructionsInput;
+			String position;
+			String instructionsInput;
 
-		while ((position = in.readLine()) != null
-				&& (instructionsInput = in.readLine()) != null) {
-			String[] positionSplitted = position.split(" ");
+			while ((position = in.readLine()) != null
+					&& (instructionsInput = in.readLine()) != null) {
+				String[] positionSplitted = position.split(" ");
 
-			MarsRover rover = new MarsRover();
-			rover.setTable(upperRightX, upperRightY);
-			rover.landOnTable(Integer.parseInt(positionSplitted[0]),
-					Integer.parseInt(positionSplitted[1]), positionSplitted[2]);
-			rover.receiveCommands(instructionsInput);
+				MarsRover rover = new MarsRover();
+				rover.setTable(upperRightX, upperRightY);
+				rover.landOnTable(Integer.parseInt(positionSplitted[0]),
+						Integer.parseInt(positionSplitted[1]),
+						positionSplitted[2]);
+				rover.receiveCommands(instructionsInput);
 
-			if (execute) {
-				rover.executeCommands();
+				if (execute) {
+					rover.executeCommands();
+				}
+				if (loggable) {
+					rover.logPosition();
+				}
+				marsRovers.add(rover);
 			}
-			if (loggable) {
-				rover.logPosition();
-			}
-			marsRovers.add(rover);
+
+			// All rovers are landed in the plateau and have received their
+			// commands; optionally they could be executed as well.
+			return marsRovers.toArray(new MarsRover[marsRovers.size()]);
+		} finally {
+			in.close();
 		}
-
-		// All rovers are landed in the plateau and have received their
-		// commands; optionally they could be executed as well.
-		return marsRovers.toArray(new MarsRover[marsRovers.size()]);
 
 	}
 
