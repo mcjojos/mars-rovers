@@ -1,7 +1,7 @@
 MarsRovers has a PlaneTable where it is positioned, a position (x, y) and a direction (North, East,
 South, West). It provides a method to receive commands and to execute them. Receipt and execution 
-of commands can be also done in one step, invoking one method. A command controller is responsible
-to parse the commands, store them in a FIFO queue and execute them.
+of commands can be also done in one step. A command controller is responsible to parse the 
+commands, store them in a FIFO queue and execute them.
 The command design pattern is used to implement the three possible commands, thus making it easily
 extentable with other commands. The three possible instructions are modelled in an Enum, providing
 for each one the proper command implementation during construction time. This way only three
