@@ -34,11 +34,11 @@ import uni.mars.naasaa.util.PlaneTable;
  * </pre>
  * 
  * It is assumed that no collision can occur between two rovers and that we can
- * position them in the same point
+ * position them in the same point.
  * 
  * In case the direction type is not found the default that is used is N
  * (North). In case an instruction is not matched against the determined ones
- * then it is simply skipped.
+ * then it is skipped.
  * 
  * @author karanikasg
  * 
