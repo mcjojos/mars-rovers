@@ -2,4 +2,4 @@ In order to run the JUnit test from the command line make sure that the two proj
 and JRE 7 is installed (for Windows OS):
 
 cd "path\to\MarsRoversUnitTest"
-java -cp .;../MarsRovers/bin;bin;junit.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore test.uni.mars.naasaa.TestMarsRover
+java -cp .;..\MarsRovers\bin;bin;junit.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore test.uni.mars.naasaa.TestMarsRover
